@@ -58,7 +58,7 @@ def del_users_template(get_users_func, del_user_func):
             users = list(set(users).intersection(del_list))
         for username in users:
             if pattern is None or re.search(pattern, username):
-                to_remove = prompt('Are you sure you want to delete {0}? Y/n:'.format(username))
+                to_remove = 'Y'#prompt('Are you sure you want to delete {0}? Y/n:'.format(username))
                 if to_remove == 'Y':
                     try:
                         del_user_func(username)

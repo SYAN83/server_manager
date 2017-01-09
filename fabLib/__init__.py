@@ -1,1 +1,2 @@
-import hdfs, hive, server, templates
+
+__all__ = ['hdfs', 'hive', 'server']

@@ -8,24 +8,24 @@ def get_users(pattern=None, verbose=True):
     return templates.get_users_template(dbList)(pattern, verbose)
 
 
-def create_users(add_list):
-    return templates.create_users_template(get_users, __add_user)(add_list)
+def add_users(add_list):
+    return templates.add_users_template(get_users, __add_user)(add_list)
 
 
-def remove_users(pattern=None, remove_list=[]):
-    return templates.remove_users_template(get_users, __del_user)(pattern, remove_list)
+def del_users(pattern=None, del_list=[]):
+    return templates.del_users_template(get_users, __del_user)(pattern, del_list)
 
 
 def get_tables(database="default", pattern=None, verbose=True):
-    tblString = run("hive -e 'SHOW TABLES IN {0};'".format(database))
-    tblList = __hiveStringToList(tblString)
-    return templates.get_users_template(tblList)(pattern, verbose)
+    tbl_string = run("hive -e 'SHOW TABLES IN {0};'".format(database))
+    tbl_list = __hiveStringToList(tbl_string)
+    return templates.get_users_template(tbl_list)(pattern, verbose)
 
 
 def drop_tables(username):
     run('''
-    hive -e 'SHOW TABLES IN {0}.db' | xargs -I '{{}}'
-    hive -e 'USE {0}.db;DROP TABLE IF EXISTS {{}};DROP VIEW IF EXISTS {{}}'
+    hive -e 'SHOW TABLES IN {0}' | xargs -I '{{}}'\
+    hive -e 'USE {0};DROP TABLE IF EXISTS {{}};DROP VIEW IF EXISTS {{}}'
     '''.format(username))
 
 
@@ -39,9 +39,8 @@ def __add_user(username, password=None, group=None):
 
 
 def __del_user(username):
-    database = username + '.db'
-    drop_tables(database)
-    run("hive -e 'DROP DATABASE {0}'".format(database))
+    drop_tables(username)
+    run("hive -e 'DROP DATABASE {0}'".format(username))
 
 
 def __hiveStringToList(dbString):
