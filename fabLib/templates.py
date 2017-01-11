@@ -30,15 +30,9 @@ def add_users_template(get_users_func, add_user_func):
                 fails.append(username)
                 continue
             else:
-                try:
-                    add_user_func(username, password)
-                except:
-                    use_shell = prompt('Open Server Shell? Y/n')
-                    if use_shell == 'Y':
-                        open_shell()
-                    else:
-                        fails.append(username)
-                    continue
+                code = add_user_func(username, password)
+                if code != 0:
+                    fails.append(username)
         if fails:
             print 'Unable to add the following users:'
             print '\n'.join(fails)
@@ -58,17 +52,11 @@ def del_users_template(get_users_func, del_user_func):
             users = list(set(users).intersection(del_list))
         for username in users:
             if pattern is None or re.search(pattern, username):
-                to_remove = 'Y'#prompt('Are you sure you want to delete {0}? Y/n:'.format(username))
+                to_remove = prompt('Are you sure you want to delete {0}? Y/n:'.format(username))
                 if to_remove == 'Y':
-                    try:
-                        del_user_func(username)
-                    except:
-                        use_shell = prompt('Open Server Shell? Y/n')
-                        if use_shell == 'Y':
-                            open_shell()
-                        else:
-                            fails.append(username)
-                        continue
+                    code = del_user_func(username)
+                    if code != 0:
+                        fails.append(username)
         if fails:
             print 'Unable to delete the following users:'
             print '\n'.join(fails)

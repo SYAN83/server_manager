@@ -1,6 +1,7 @@
 import json
 import base64
 import os
+import getpass
 
 file_path = 'credentials.json'
 
@@ -26,7 +27,7 @@ def add_credentials(host=None):
             host = raw_input('add host (press enter to finish): ')
         if not host:
             break
-        passwd = raw_input('password for {0}: '.format(host))
+        passwd = getpass.getpass('password for {0}: '.format(host))
         credentials[host] = base64.b64encode(passwd)
     with open(file_path, 'w') as f:
         json.dump(credentials, f)

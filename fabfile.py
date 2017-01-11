@@ -15,11 +15,12 @@ def check_credentials(host):
 
 
 def test_run():
-    # syan@216.230.228.82
     host = raw_input('Host: ').strip()
     check_credentials(host)
-    with settings(host_string=host, password=passwd[host]):
-        print hive.drop_tables('atn_cb')
+    with settings(host_string=host, password=passwd[host], warn_only=True):
+        # print mysql.add_user('linuxuser')
+        # print mysql.add_tables(['linuxuser'])
+        print mysql.del_user('linuxuser')
 
 if __name__ == '__main__':
     test_run()
