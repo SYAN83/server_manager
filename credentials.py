@@ -1,13 +1,14 @@
 import json
 import base64
 import os
+import getpass
 
 file_path = 'credentials.json'
 
 
 def get_credentials(decode=True):
     if not os.path.exists(file_path):
-        add_credentials()
+        return dict()
     with open(file_path, 'r') as f:
         credentials = json.loads(f.read())
         if decode:
@@ -21,13 +22,10 @@ def add_credentials(host=None):
         credentials = get_credentials(decode=False)
     else:
         credentials = dict()
-    while True:
-        if not host:
-            host = raw_input('add host (press enter to finish): ')
-        if not host:
-            break
-        passwd = raw_input('password for {0}: '.format(host))
-        credentials[host] = base64.b64encode(passwd)
+    if not host:
+        host = raw_input('Host: ').strip()
+        passwd = getpass.getpass('Password:')
+    credentials[host] = base64.b64encode(passwd)
     with open(file_path, 'w') as f:
         json.dump(credentials, f)
 
