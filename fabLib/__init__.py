@@ -1,2 +1,2 @@
 
-__all__ = ['hdfs', 'hive', 'server']
+__all__ = ['hdfs', 'hive', 'server', 'mysql']

@@ -41,14 +41,16 @@ def log_permission():
 
 
 def hadoop_busniss_add_file(user_list):
+    fails = list()
     for username in user_list:
-        try:
-            run('hadoop fs -put /data3/aetna-track-1/* /user/{0}/'.format(username))
-            run('hadoop fs -chown {0}:{0} /user/{0}/Diagnosis_Code.csv'.format(username))
-            run('hadoop fs -chown {0}:{0} /user/{0}/hospital_discharge.csv'.format(username))
-        except:
-            print('Unable to add file(s) to account {0}'.format(username))
-            continue
+        code = run('''
+        hadoop fs -put /data3/aetna-track-1/* /user/{0}/;
+        hadoop fs -chown {0}:{0} /user/{0}/Diagnosis_Code.csv;
+        hadoop fs -chown {0}:{0} /user/{0}/hospital_discharge.csv;
+        '''.format(username))
+        if code != 0:
+            fails.append(username)
+    return fails
 
 
 def __add_user(username, password=None, group=None):

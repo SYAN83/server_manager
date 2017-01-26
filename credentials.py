@@ -22,10 +22,13 @@ def add_credentials(host=None):
         credentials = get_credentials(decode=False)
     else:
         credentials = dict()
-    if not host:
-        host = raw_input('Host: ').strip()
-        passwd = getpass.getpass('Password:')
-    credentials[host] = base64.b64encode(passwd)
+    while True:
+        if not host:
+            host = raw_input('add host (press enter to finish): ')
+        if not host:
+            break
+        passwd = getpass.getpass('password for {0}: '.format(host))
+        credentials[host] = base64.b64encode(passwd)
     with open(file_path, 'w') as f:
         json.dump(credentials, f)
 
